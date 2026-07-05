@@ -39,6 +39,13 @@ User: "What's the weather in Tokyo?"
    Agent responds: "It's 8°C and cloudy in Tokyo!"
 ```
 
+> ⚠️ **Common misconception:** The LLM does **not** run any code itself. What actually happens:
+> 1. The model outputs a special structured message saying "call the function named `get_weather` with argument `city='Tokyo'`" (this is the `tool_calls` you'll see in the code below).
+> 2. **Your Python program** (via LangChain's agent loop) is the one that actually runs the real `get_weather()` function.
+> 3. The result is sent back to the model as a new message, and the model uses it to write its final answer.
+>
+> This matters for safety too: an LLM can only ever *request* a tool call — it can't do anything your code doesn't explicitly let it do.
+
 ---
 
 ## 📁 Step 1: Create Your Project Folder
@@ -133,6 +140,8 @@ def get_weather(city: str) -> str:
 | `city: str` | LLM knows it needs a city name |
 | Return string | What the agent receives back |
 
+> 📘 **How does the model know what arguments to send?** LangChain automatically inspects your function's **type hints** (`city: str`) and **docstring** to build a schema — a JSON description of the function's name, parameters, and purpose — that gets sent to the model alongside your prompt. This is why the docstring isn't just a comment for humans: the model literally reads it to decide *when* and *how* to call your tool. Vague docstrings lead to the model calling tools incorrectly, or not at all.
+
 ---
 
 ## 📋 Step 5: Export the Tools
@@ -196,6 +205,10 @@ def get_weather(city: str) -> str:
 
 TOOLS = [get_weather]
 ```
+
+> 📘 **Quick HTTP refresher:** `httpx.get(url, params={...})` sends an HTTP GET request — the same kind your browser sends when you visit a webpage. `params` get added to the URL as a query string (e.g., `?key=...&q=London`), and `timeout=10.0` means "give up and raise an error if the server hasn't responded in 10 seconds," so one slow request can't freeze your whole app.
+>
+> 📘 **Why `try`/`except`?** Network calls can fail in many ways (no internet, invalid city name, API downtime). `try` runs the risky code; `except` catches specific failure types so we can return a friendly error message instead of crashing the whole agent. Prefer catching specific exceptions (like `httpx.HTTPStatusError`) over a bare `except:` so you don't accidentally hide real bugs.
 
 ---
 
@@ -318,6 +331,8 @@ async def main(message: cl.Message):
     chat_history.append({"role": "assistant", "content": full_response})
     cl.user_session.set("chat_history", chat_history)
 ```
+
+> 📘 **What is `cl.Step`?** It's a Chainlit UI element for showing "work in progress" separately from the main chat message — a collapsible box that displays which tool was called, with what input, and what it returned. It's purely visual/for transparency; the agent's actual behavior doesn't depend on it.
 
 **What's new:**
 | Phase 4 | Phase 5 |

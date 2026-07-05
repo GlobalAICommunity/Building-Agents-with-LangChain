@@ -17,6 +17,24 @@ By the end of this phase, you will:
 
 ---
 
+## 🧠 First, What Exactly *Is* an LLM?
+
+A **Large Language Model (LLM)** is a program trained on enormous amounts of text (books, websites, code, conversations) so that it can predict, one small piece at a time, what text should come next. At its core, it's a very sophisticated "autocomplete." What makes it feel intelligent is scale — with billions of parameters and huge training data, that autocomplete becomes capable of answering questions, writing code, and holding conversations.
+
+A few terms you'll see throughout the workshop:
+
+| Term | Meaning |
+|------|---------|
+| **Prompt** | The text/instructions you send to the model |
+| **Completion / Response** | The text the model generates back |
+| **Token** | A chunk of text (roughly ¾ of a word). Models read and write text token-by-token, and API usage/limits are measured in tokens — not characters or words |
+| **Temperature** | A setting (usually 0–1) controlling randomness: lower = more predictable/focused, higher = more varied/creative |
+| **Context window** | The maximum amount of text (in tokens) the model can "see" at once, including the entire conversation history |
+
+We never talk to the model directly — we go through an **API** (Application Programming Interface): a defined way for our Python code to send a prompt over the internet and receive a completion back, without needing to know anything about how the model runs internally.
+
+---
+
 ## 🤖 What is GitHub Models?
 
 GitHub Models is a free service that provides:
@@ -257,6 +275,9 @@ When you ran the test script:
    Authorization: Bearer ghp_xxxxx
    Content-Type: application/json
    ```
+
+   > 📘 **What does "Bearer" mean?** It's a standard authentication scheme — it just means "whoever presents (bears) this token is authorized to make the request." Almost every modern API (not just GitHub's) uses this same pattern, so this concept will come up again outside this workshop.
+
    And body:
    ```json
    {
@@ -265,6 +286,8 @@ When you ran the test script:
      "temperature": 0.7
    }
    ```
+
+   > 📘 **What is JSON?** JSON (JavaScript Object Notation) is a lightweight, text-based way to represent data — essentially Python dictionaries and lists written out as text so they can travel over the network. Every request to, and response from, the LLM API is JSON under the hood, even though LangChain's `ChatOpenAI` hides that detail behind normal Python objects and method calls.
 
 4. **Response** - GitHub routed the request to the GPT-4.1-nano model and returned the completion
 

@@ -4,6 +4,18 @@
 
 Before we dive into building our AI chat agent, let's make sure you have everything ready. This phase is a quick check to ensure a smooth workshop experience.
 
+{% hint style="info" %}
+**New to programming or AI?** Welcome — this workshop assumes **zero prior experience** with LangChain, Chainlit, or building AI agents. Here are a few terms you'll see constantly, as a quick preview (we'll re-explain each one again, in context, the first time it actually matters):
+
+- **Terminal (command line)**: A text-based way to control your computer by typing commands instead of clicking icons. Every step in this workshop happens here.
+- **LLM (Large Language Model)**: The "brain" behind AI chat tools like ChatGPT — a model trained on huge amounts of text that predicts and generates human-like language.
+- **API (Application Programming Interface)**: A way for two pieces of software to talk to each other, usually over the internet. We'll use an API to send text to an LLM and get a reply back.
+- **API key / token**: A secret string that proves "this request is allowed" — like a password, but for software instead of humans.
+- **Package**: A bundle of reusable code someone else already wrote (e.g., `chainlit`, `langchain`) that we install instead of writing everything from scratch.
+
+Don't worry about memorizing these — just skim and move on.
+{% endhint %}
+
 ---
 
 ## 🎒 What You Need
@@ -15,6 +27,8 @@ Before we dive into building our AI chat agent, let's make sure you have everyth
 | macOS | Terminal.app or iTerm2 |
 | Windows | PowerShell, CMD, or Windows Terminal |
 | Linux | Any terminal emulator |
+
+> 💡 **Never used a terminal before?** No problem — this workshop only needs a handful of commands (mostly `cd`, `python`, and `pip`/`uv`). Every step tells you exactly what to type, so you can copy-paste if you're unsure.
 
 ### 2. **Python 3.10 or Higher**
 
@@ -35,6 +49,8 @@ python --version
 - Linux: `sudo apt install python3.12` (Ubuntu/Debian)
 {% endhint %}
 
+> 📘 **Why does the version matter?** Newer libraries (like `langchain`) use Python language features that don't exist in older releases. If your Python is too old, `pip install` will fail with a confusing error — checking this now saves time later.
+
 ### 3. **Git Installed**
 
 ```bash
@@ -52,6 +68,8 @@ We recommend **Visual Studio Code** with the Python extension, but any editor wo
 You'll need this to access GitHub Models (free LLM API). 
 
 👉 No account? Create one at [github.com](https://github.com/signup)
+
+> 💡 **Note:** In Phase 2, you'll generate a "Personal Access Token" (PAT) from this account — think of it as a temporary password that lets our Python code talk to GitHub's AI models on your behalf. There's nothing to set up yet; we'll walk through it step by step.
 
 ### 6. **Internet Connection**
 

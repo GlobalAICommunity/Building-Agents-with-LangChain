@@ -16,9 +16,11 @@ By the end of this phase, you will:
 
 ---
 
-## �� What is MCP?
+## 🌐 What is MCP?
 
 **Model Context Protocol (MCP)** is an open standard for connecting AI agents to tools.
+
+> 📘 **Analogy:** Before USB existed, every printer, mouse, and camera needed its own custom cable and driver. USB standardized the *connector* so any device works with any computer. **MCP does the same thing for AI tools** — instead of every AI app (Claude, ChatGPT, your own agent) needing custom integration code for every tool or service, MCP defines one standard "plug" that any MCP-compatible client can use to discover and call tools from any MCP-compatible server.
 
 ### Without MCP
 Each AI app defines its own tools locally.
@@ -56,6 +58,12 @@ Tools are provided by external **MCP servers** that any AI app can connect to.
 | **Modular** | Add tools without code changes |
 | **Standard** | Works with Claude, ChatGPT, your agent |
 
+> 📘 **Client vs. server, and "transport"** In MCP, your agent is the **client** and each tool provider runs an **MCP server** (it could run locally on your machine, or remotely like `https://docs.langchain.com/mcp`). The **transport** is simply *how* the client and server talk to each other:
+> - `"http"` — over the network, like a website (what we use here)
+> - `"stdio"` — over your local machine's standard input/output, used for servers that run as a local process
+>
+> ⚠️ **Security note:** Unlike your local `get_weather` tool (code you wrote and can read), an MCP tool runs on *someone else's* server. Only connect to MCP servers you trust — a malicious or compromised server could return misleading data or, if it can perform actions, take unwanted actions on your behalf.
+
 ---
 
 ## 📁 Step 1: Create Your Project Folder
@@ -70,7 +78,7 @@ cd phase-06
 ## 📦 Step 2: Install MCP Adapter
 
 ```bash
-pip install langchain-mcp-adapters
+pip install langchain-mcp-adapters==0.3.0
 ```
 
 ---

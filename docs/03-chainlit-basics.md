@@ -16,6 +16,28 @@ By the end of this phase, you will:
 
 ---
 
+## 💬 What is Chainlit (and why not build a website from scratch)?
+
+Normally, building a chat web app means writing HTML/CSS/JavaScript for the UI, a backend server, WebSocket code for real-time updates, and wiring it all together. **Chainlit** is a Python library that does all of that for you — you write plain Python functions, and it renders a full chat UI in the browser automatically.
+
+Two special functions are all you need to get started:
+- `@cl.on_chat_start` — runs once when a user opens the chat
+- `@cl.on_message` — runs every time the user sends a message
+
+### 📘 Wait, what does the `@` symbol mean ("decorators")?
+
+A **decorator** is Python syntax that attaches extra behavior to a function without you writing that behavior yourself. `@cl.on_message` tells Chainlit: "call this function automatically whenever a new chat message arrives." You never call `main()` yourself — Chainlit calls it for you at the right moment. This is called an **event-driven** pattern: you write handlers for events (chat started, message received), and the framework decides when to run them.
+
+### 📘 What does `async def` / `await` mean?
+
+You'll see `async def main(...)` and `await cl.Message(...).send()` throughout this workshop. In short:
+- `async def` marks a function as one that can *pause* while waiting on something slow (like a network call to the LLM) without freezing the whole app for other users.
+- `await` is used inside an `async def` function to say "pause here until this finishes, then continue."
+
+You don't need to master async programming to follow along — just remember: **whenever code talks to the network (an LLM or an API), it will be `async` and you `await` it.**
+
+---
+
 ## 📁 Step 1: Create Your Project Folder
 
 ```bash
@@ -79,6 +101,8 @@ async def main(message: cl.Message):
 - `get_llm()` - Same LLM setup from Phase 2
 - `llm.ainvoke()` - Calls the AI asynchronously
 
+> 📘 **`invoke` vs `ainvoke`:** Phase 2's test script used `llm.invoke(...)` (synchronous — it blocks until the response is ready). Chainlit apps handle many users concurrently, so we use the `a`-prefixed async version, `ainvoke`, paired with `await`, so the server can keep serving other users while waiting on the LLM.
+
 **Test it:** Ask "What is Python?" - you get a real AI response!
 
 **But there's a problem...** Try asking "Tell me more about it." The bot doesn't remember what "it" refers to!
@@ -140,6 +164,15 @@ async def main(message: cl.Message):
 | `SystemMessage` | Gives the AI its personality |
 | `HumanMessage` / `AIMessage` | Tracks the conversation |
 
+> 📘 **Concept: chat "roles"** Every LLM conversation is really just a list of messages, each tagged with a **role**:
+> - `system` — instructions that set the AI's behavior (the user never sees this)
+> - `user` (aka Human) — what the person typed
+> - `assistant` (aka AI) — what the model replied
+>
+> LangChain's `SystemMessage`, `HumanMessage`, and `AIMessage` classes are exactly these three roles. Sending the **entire list** back to the model on every turn is how it "remembers" the conversation — the model itself has no memory between API calls; we're just replaying the transcript each time.
+
+> 📘 **What is `cl.user_session`?** Chainlit gives every connected browser tab its own private, in-memory storage — like a Python dictionary only that user can read/write. It's how each workshop attendee chats with "their own" Aria without seeing anyone else's conversation. It is **not saved to disk** — if the server restarts, all sessions are lost (fine for a workshop, but not how you'd persist memory in production).
+
 **Test it:** Say "My name is Alex", then ask "What's my name?" - it remembers!
 
 ---
@@ -190,6 +223,8 @@ def get_llm():
 - `streaming=True` - Enables token-by-token output
 - `llm.astream()` - Returns chunks as they're generated
 - `msg.stream_token()` - Displays each chunk immediately
+
+> 📘 **How does streaming actually work?** The LLM API doesn't wait until the whole answer is ready — it sends back small pieces of text ("chunks", roughly one token at a time) as soon as they're generated. `llm.astream(...)` gives you these chunks as an **async generator** you loop over with `async for`. Each chunk is appended to the UI immediately via `stream_token()`, which is why the response appears to "type itself out" instead of showing up all at once.
 
 **Test it:** Ask a longer question and watch the response appear progressively!
 

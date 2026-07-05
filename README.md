@@ -39,8 +39,8 @@ Each phase ends with a **✅ Checkpoint** where you'll verify everything works b
 | Technology | Purpose | Version |
 |------------|---------|---------|
 | Python | Runtime | 3.10+ |
-| Chainlit | Chat UI Framework | 2.x |
-| LangChain | LLM Orchestration | 0.3.x |
+| Chainlit | Chat UI Framework | 2.11.x |
+| LangChain | LLM Orchestration | 1.3.x |
 | GitHub Models | Free LLM API | Latest |
 | WeatherAPI | Tool Demo | Free Tier |
 | MCP | Agent Protocol | 1.x |

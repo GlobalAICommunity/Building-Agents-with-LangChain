@@ -16,7 +16,15 @@ By the end of this phase, you will:
 
 ---
 
-## 🤖 What is an Agent?
+## � LangChain, LangGraph, and Agents — How They Fit Together
+
+- **LangChain** is a framework of building blocks for LLM apps: prompts, models, tools, memory, and — most relevant here — **agents**.
+- **LangGraph** is a lower-level library (by the same team) that represents an application as a graph of steps that can loop, branch, and hold state. You won't write LangGraph code directly in this workshop, but it's worth knowing: `create_agent()` builds a LangGraph graph behind the scenes. That's *why* an agent can "loop" (think → act → observe → repeat) instead of only answering once like a plain LLM call.
+- A **chain** (an older, simpler LangChain concept) is a fixed, one-directional sequence of steps — always A then B then C, decided in advance by you. An **agent** is more flexible: at each step, the *model itself* decides what happens next (answer directly? call a tool? call another tool?). That dynamic decision-making is the whole point of Phases 5 and 6.
+
+---
+
+## �🤖 What is an Agent?
 
 An **agent** is an AI that can:
 1. **Think** about what to do
@@ -183,6 +191,10 @@ async def main(message: cl.Message):
     chat_history.append({"role": "assistant", "content": full_response})
     cl.user_session.set("chat_history", chat_history)
 ```
+
+> 📘 **Why dicts instead of `HumanMessage`/`AIMessage` now?** `create_agent()` accepts simple `{"role": ..., "content": ...}` dictionaries — the same format used by the raw OpenAI-style API and the most common convention across the industry. You can still use LangChain message objects if you prefer; dicts are just less typing. Both represent the exact same three roles from Phase 3 (`system`/`user`/`assistant`).
+
+> 📘 **What's `content_blocks`?** Modern LLM responses aren't always plain text — they can include text, tool calls, images, etc. as separate labeled "blocks." `content_blocks` is a list of these blocks; `chunks[-1]["text"]` grabs the text out of the most recent one. Right now (no tools yet) it's always plain text, but this structure is exactly what lets the *same* streaming code also handle tool calls, as you'll see in Phase 5.
 
 **What's different from Phase 3:**
 | Phase 3 | Phase 4 |

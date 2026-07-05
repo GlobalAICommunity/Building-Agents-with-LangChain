@@ -74,7 +74,9 @@ When you created the virtual environment:
 
 **You'll know it's active when you see `(.venv)` at the start of your terminal prompt.**
 
-> 💡 **Tip:** To exit the virtual environment later, simply run `deactivate`.
+> � **Analogy:** Think of a virtual environment as a separate toolbox for each project. Without one, every Python project on your machine shares the exact same tools (packages) and versions — so one project needing `langchain 1.x` while another needs `0.3.x` would break at least one of them. A virtual environment gives each project its own isolated toolbox, so nothing conflicts.
+
+> �💡 **Tip:** To exit the virtual environment later, simply run `deactivate`.
 
 ---
 
@@ -86,20 +88,24 @@ Create a file called `requirements.txt` with our core dependencies:
 # Create the requirements file
 cat > requirements.txt << 'EOF'
 # Chat UI Framework
-chainlit>=2.0.0
+chainlit==2.11.1
 
 # LLM Orchestration
-langchain>=0.3.0
-langchain-openai>=0.3.0
+langchain==1.3.11
+langchain-core==1.4.8
+langchain-openai==1.3.3
 
 # HTTP requests for tools
-httpx>=0.27.0
+httpx==0.28.1
 
 # Environment variable management
-python-dotenv>=1.0.0
+python-dotenv==1.2.2
 
 # MCP Integration
-mcp>=1.0.0
+mcp==1.28.1
+
+# MCP Adapters
+langchain-mcp-adapters==0.3.0
 EOF
 ```
 
@@ -107,20 +113,24 @@ Or manually create `requirements.txt` with this content:
 
 ```txt
 # Chat UI Framework
-chainlit>=2.0.0
+chainlit==2.11.1
 
 # LLM Orchestration
-langchain>=0.3.0
-langchain-openai>=0.3.0
+langchain==1.3.11
+langchain-core==1.4.8
+langchain-openai==1.3.3
 
 # HTTP requests for tools
-httpx>=0.27.0
+httpx==0.28.1
 
 # Environment variable management
-python-dotenv>=1.0.0
+python-dotenv==1.2.2
 
 # MCP Integration
-mcp>=1.0.0
+mcp==1.28.1
+
+# MCP Adapters
+langchain-mcp-adapters==0.3.0
 ```
 
 ### 🔍 What Are These Packages?
@@ -133,6 +143,8 @@ mcp>=1.0.0
 | `httpx` | Modern async HTTP client for calling external APIs |
 | `python-dotenv` | Loads environment variables from `.env` files |
 | `mcp` | Model Context Protocol for standardized agent communication |
+
+> 📘 **Why exact versions (`==`) instead of a range (`>=`)?** Pinning to an exact version means everyone installs the *identical* release. Libraries move fast — a newer version could rename a function or change behavior — so exact pins avoid the classic "it works on my machine but not yours" problem during a live workshop. In your own projects later, you'll often relax this once you've tested compatibility.
 
 ---
 
@@ -160,6 +172,8 @@ This may take 1-2 minutes.
 
 We'll store sensitive data (API keys) in a `.env` file. Create it now as a placeholder:
 
+> 📘 **What's an "environment variable"?** It's a named value stored outside your code, at the level of your operating system or terminal session, that any program can read. In Python we read them with `os.getenv("NAME")`. We use them for secrets like API keys so those secrets never get hard-coded directly into files that might be shared, screen-shared, or committed to git.
+
 ```bash
 cat > .env << 'EOF'
 # GitHub Models (we'll fill this in Phase 2)
@@ -173,6 +187,8 @@ EOF
 ### 🔒 Security Note
 
 The `.env` file should **never** be committed to git. Let's create a `.gitignore`:
+
+> 📘 **Why does this matter?** Git tracks every change to every committed file — forever, in the project's history. If a secret like `GITHUB_TOKEN` ends up in a commit, deleting it later isn't enough; it still exists in that history and anyone with repo access (or a public GitHub search) could find it. `.gitignore` tells Git "never track this file at all," which is the safest way to keep secrets out of version control entirely.
 
 ```bash
 cat > .gitignore << 'EOF'
@@ -232,8 +248,8 @@ python -c "import langchain; print(f'LangChain version: {langchain.__version__}'
 
 **Expected output**:
 ```
-Chainlit version: 2.x.x
-LangChain version: 0.3.x
+Chainlit version: 2.11.1
+LangChain version: 1.3.11
 ```
 
 ### Test 3: Environment File Exists

@@ -260,6 +260,40 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ---
 
+## 📘 Glossary of Terms
+
+A quick reference for terms used throughout the workshop docs. If you're new to this space, it's worth skimming once — every term is also explained in context the first time it matters.
+
+| Term | Meaning |
+|------|---------|
+| **Terminal / CLI** | A text-based interface for running commands, instead of clicking icons |
+| **Virtual environment (`.venv`)** | An isolated Python installation for one project, so its packages don't conflict with other projects |
+| **`pip` / `uv`** | Package managers — tools that download and install Python libraries |
+| **Environment variable** | A named value (like a secret API key) stored outside your code, read via `os.getenv("NAME")` |
+| **`.env` file** | A local, git-ignored file storing environment variables for your project |
+| **API (Application Programming Interface)** | A defined way for two programs to talk to each other, usually over the internet |
+| **LLM (Large Language Model)** | An AI model trained on huge amounts of text that predicts and generates human-like language |
+| **Token (LLM sense)** | A chunk of text (~¾ of a word) that models process one at a time; usage/limits are measured in tokens |
+| **Token (auth sense)** | A secret credential (e.g., GitHub Personal Access Token) that proves a request is authorized — unrelated to LLM tokens despite the shared name |
+| **Prompt** | The input text/instructions sent to an LLM |
+| **Temperature** | A setting controlling response randomness: lower = more predictable, higher = more varied |
+| **JSON** | A text-based format for structured data (like a Python dict written as text), used by virtually all web APIs |
+| **Bearer token** | An HTTP authentication scheme where a secret token is included in the request to prove authorization |
+| **Decorator (`@something`)** | Python syntax that attaches extra behavior to a function, e.g. `@cl.on_message` tells Chainlit to call that function on every new message |
+| **`async` / `await`** | Python keywords for writing non-blocking code — `async def` marks a pausable function, `await` pauses until a slow operation (like a network call) finishes |
+| **Streaming** | Receiving an LLM response in small incremental chunks as they're generated, instead of waiting for the full answer |
+| **Session (`cl.user_session`)** | Private, in-memory storage Chainlit keeps per connected user; lost on server restart |
+| **Chain** | A fixed, one-directional sequence of LLM/processing steps defined in advance |
+| **Agent** | An LLM-driven loop that can reason, decide to call tools, observe results, and repeat until it has an answer |
+| **LangGraph** | The lower-level graph/state-machine library that LangChain's `create_agent()` is built on |
+| **Tool / function calling** | A mechanism letting an LLM request that your code run a specific function with specific arguments; the LLM never executes code itself |
+| **`cl.Step`** | A Chainlit UI element that visually shows a tool call and its result in a collapsible box |
+| **MCP (Model Context Protocol)** | An open standard letting AI agents discover and call tools hosted on external MCP servers, without custom per-tool integration code |
+| **MCP transport** | The communication channel between an MCP client and server — `"http"` (network) or `"stdio"` (local process) |
+
+
+---
+
 ## 🔄 Quick Fixes Checklist
 
 When something breaks, try these in order:
