@@ -1,8 +1,8 @@
-# Summary
+# Table of contents
 
 ## Getting Started
 
-* [Introduction](README.md)
+* [🤖 Introduction](README.md)
 * [Prerequisites](docs/00-prerequisites.md)
 
 ## Workshop Phases
